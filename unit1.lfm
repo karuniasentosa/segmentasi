@@ -1,0 +1,66 @@
+object Form1: TForm1
+  Left = 892
+  Height = 445
+  Top = 139
+  Width = 525
+  Caption = 'Form1'
+  ClientHeight = 445
+  ClientWidth = 525
+  LCLVersion = '2.2.2.0'
+  object btnOpen: TButton
+    Left = 16
+    Height = 25
+    Top = 16
+    Width = 75
+    Caption = 'Open'
+    OnClick = btnOpenClick
+    TabOrder = 0
+  end
+  object btnSegmentasi: TButton
+    Left = 16
+    Height = 25
+    Top = 48
+    Width = 75
+    Caption = 'Segmentasi'
+    OnClick = btnSegmentasiClick
+    TabOrder = 1
+  end
+  object Image1: TImage
+    Left = 16
+    Height = 234
+    Top = 160
+    Width = 234
+    AutoSize = True
+  end
+  object TrackBar1: TTrackBar
+    Left = 296
+    Height = 47
+    Top = 32
+    Width = 100
+    Max = 255
+    Position = 127
+    TabOrder = 2
+  end
+  object btnSegmentasiThreshold: TButton
+    Left = 16
+    Height = 25
+    Top = 80
+    Width = 144
+    Caption = 'Segmentasi Threshold'
+    OnClick = btnSegmentasiThresholdClick
+    TabOrder = 3
+  end
+  object btnDeteksiTepi: TButton
+    Left = 16
+    Height = 25
+    Top = 112
+    Width = 75
+    Caption = 'Deteksi Tepi'
+    OnClick = btnDeteksiTepiClick
+    TabOrder = 4
+  end
+  object OpenPictureDialog1: TOpenPictureDialog
+    Left = 168
+    Top = 24
+  end
+end
