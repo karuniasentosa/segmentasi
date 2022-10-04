@@ -1,11 +1,11 @@
 object Form1: TForm1
-  Left = 892
-  Height = 445
-  Top = 139
-  Width = 525
+  Left = 913
+  Height = 439
+  Top = 121
+  Width = 435
   Caption = 'Form1'
-  ClientHeight = 445
-  ClientWidth = 525
+  ClientHeight = 439
+  ClientWidth = 435
   LCLVersion = '2.2.2.0'
   object btnOpen: TButton
     Left = 16
@@ -58,6 +58,23 @@ object Form1: TForm1
     Caption = 'Deteksi Tepi'
     OnClick = btnDeteksiTepiClick
     TabOrder = 4
+  end
+  object btnErosi: TButton
+    Left = 104
+    Height = 25
+    Top = 112
+    Width = 75
+    Caption = 'Erosi'
+    OnClick = btnErosiClick
+    TabOrder = 5
+  end
+  object btnDilasi: TButton
+    Left = 192
+    Height = 25
+    Top = 112
+    Width = 75
+    Caption = 'Dilasi'
+    TabOrder = 6
   end
   object OpenPictureDialog1: TOpenPictureDialog
     Left = 168

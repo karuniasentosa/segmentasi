@@ -13,14 +13,17 @@ type
   { TForm1 }
 
   TForm1 = class(TForm)
+    btnDilasi: TButton;
     btnOpen: TButton;
     btnSegmentasi: TButton;
     btnSegmentasiThreshold: TButton;
     btnDeteksiTepi: TButton;
+    btnErosi: TButton;
     Image1: TImage;
     OpenPictureDialog1: TOpenPictureDialog;
     TrackBar1: TTrackBar;
     procedure btnDeteksiTepiClick(Sender: TObject);
+    procedure btnErosiClick(Sender: TObject);
     procedure btnOpenClick(Sender: TObject);
     procedure btnSegmentasiClick(Sender: TObject);
     procedure btnSegmentasiThresholdClick(Sender: TObject);
@@ -33,7 +36,13 @@ type
 var
   Form1: TForm1;
   bitmapR, bitmapG, bitmapB: array[0..1500, 0..1500] of byte;
+  bitmapBiner: array[0..1500, 0..1500] of boolean; // to store original citra biner
+  bitmapBinerModified: array[0..1500, 0..1500] of boolean; // to store modified citra biner habis morfolgoi
   width, height: integer;
+const
+  BACKGROUND= false;
+  OBJEK= true;
+  structuringElement: array[0..2,0..2] of boolean = ((false, true, false), (true, true, true), (false, true, false));
 
 implementation
 
@@ -103,6 +112,53 @@ begin
 
 end;
 
+procedure TForm1.btnErosiClick(Sender: TObject);
+var
+  y, x: integer;
+  ys, xs: integer;
+  coordX, coordY: integer;
+  seResult: boolean = false;
+begin
+  // we do use SE with bitmapBiner
+  // then "return" the black value with rgb value
+
+  for y := -1 to image1.height - 1 do begin
+    for x := -1 to image1.width - 1 do begin
+      for xs := 0 to 2 do begin
+        for ys := 0 to 2 do begin
+          coordY := y + ys;
+          coordX := x + xs;
+
+          if ((coordY >= 0) and (coordY < image1.height)) and
+             ((coordX >= 0) and (coordX < image1.width)) then
+                seResult := seResult AND
+                            (bitmapBiner[x + 1, y + 1] =
+                             structuringElement[xs, ys])
+          else
+                seResult := seResult AND
+                            (false = structuringElement[xs, ys]);
+        end;
+      end;
+      bitmapBinerModified[x + 1, y + 1] := seResult;
+    end;
+  end;
+  // apply bitmapBinerModified to bitmapBiner
+  for x := 0 to image1.width - 1 do begin
+    for y := 0 to image1.height - 1 do begin
+      bitmapBiner[x, y] := bitmapBinerModified[x, y];
+    end;
+  end;
+
+  // reapply all true's to rgb
+  for y := 0 to image1.height - 1 do begin
+    for x := 0 to image1.width - 1 do begin
+      if bitmapBiner[x, y] = true then
+            image1.canvas.pixels[x, y] := rgb(bitmapR[x, y], bitmapG[x, y], bitmapB[x, y])
+      else image1.canvas.pixels[x, y] := clwhite;
+    end;
+  end;
+end;
+
 procedure TForm1.btnSegmentasiClick(Sender: TObject);
 var
   y, x: integer;
@@ -114,8 +170,11 @@ begin
       avg := avg + GetGValue(image1.canvas.pixels[x, y]);
       avg := avg + getBvalue(image1.canvas.pixels[x, y]);
       avg := avg div 3;
-      if avg > Trackbar1.position then
+      if avg > Trackbar1.position then         begin
+         bitmapBiner[x, y] := background;
          image1.canvas.pixels[x, y] := RGB(255, 255, 255);
+      end else
+         bitmapBiner[x, y] := objek;
     end;
 end;
 
