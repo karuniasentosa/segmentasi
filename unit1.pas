@@ -23,6 +23,7 @@ type
     OpenPictureDialog1: TOpenPictureDialog;
     TrackBar1: TTrackBar;
     procedure btnDeteksiTepiClick(Sender: TObject);
+    procedure btnDilasiClick(Sender: TObject);
     procedure btnErosiClick(Sender: TObject);
     procedure btnOpenClick(Sender: TObject);
     procedure btnSegmentasiClick(Sender: TObject);
@@ -112,35 +113,71 @@ begin
 
 end;
 
+procedure TForm1.btnDilasiClick(Sender: TObject);
+var
+  y, x: integer;
+  ys, xs: integer;
+  coordX, coordY: integer;
+  seResult: boolean;
+  currentBiner: boolean;
+begin
+  // we do use SE with bitmapBiner
+  // then "return" the black value with rgb value
+
+  for y := 0 to height - 1 do begin
+    for x := 0 to width - 1 do begin
+      seResult := true;
+      for xs := 0 to 2 do begin
+        for ys := 0 to 2 do begin
+          coordY := y + ys;
+          coordX := x + xs;
+          currentBiner := bitmapBiner[coordX, coordY];
+          seResult := seResult xor currentBiner xor structuringElement[xs, ys];
+        end;
+      end;
+      bitmapBinerModified[x, y] := seResult;
+    end;
+  end;
+   //apply bitmapBinerModified to bitmapBiner
+  for x := 0 to width - 1 do begin
+    for y := 0 to height - 1 do begin
+      bitmapBiner[x, y] := bitmapBinerModified[x, y];
+    end;
+  end;
+
+  // reapply all true's to rgb
+  for y := 0 to height - 1 do begin
+    for x := 0 to width - 1 do begin
+      if bitmapBiner[x, y] = objek then
+            image1.canvas.pixels[x, y] := rgb(bitmapR[x, y], bitmapG[x, y], bitmapB[x, y])
+      else image1.canvas.pixels[x, y] := clwhite;
+    end;
+  end;
+end;
+
 procedure TForm1.btnErosiClick(Sender: TObject);
 var
   y, x: integer;
   ys, xs: integer;
   coordX, coordY: integer;
   seResult: boolean;
+  currentBiner: boolean;
 begin
   // we do use SE with bitmapBiner
   // then "return" the black value with rgb value
 
-  for y := -1 to height - 1 do begin
-    for x := -1 to width - 1 do begin
+  for y := 0 to height - 1 do begin
+    for x := 0 to width - 1 do begin
       seResult := true;
       for xs := 0 to 2 do begin
         for ys := 0 to 2 do begin
           coordY := y + ys;
           coordX := x + xs;
-
-          if ((coordY >= 0) and (coordY < height)) and
-             ((coordX >= 0) and (coordX < width)) then
-                seResult := seResult and
-                            (bitmapBiner[x + 1, y + 1] =
-                             structuringElement[xs, ys])
-          else
-                seResult := seResult and
-                            (false = structuringElement[xs, ys]);
+          currentBiner := bitmapBiner[coordX, coordY];
+          seResult := seResult and currentBiner and structuringElement[xs, ys];
         end;
       end;
-      bitmapBinerModified[x + 1, y + 1] := seResult;
+      bitmapBinerModified[x, y] := seResult;
     end;
   end;
    //apply bitmapBinerModified to bitmapBiner
