@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 931
+  Left = 837
   Height = 439
-  Top = 158
+  Top = 170
   Width = 435
   Caption = 'Form1'
   ClientHeight = 439
@@ -41,15 +41,6 @@ object Form1: TForm1
     Position = 127
     TabOrder = 2
   end
-  object btnSegmentasiThreshold: TButton
-    Left = 16
-    Height = 25
-    Top = 80
-    Width = 144
-    Caption = 'Segmentasi Threshold'
-    OnClick = btnSegmentasiThresholdClick
-    TabOrder = 3
-  end
   object btnDeteksiTepi: TButton
     Left = 16
     Height = 25
@@ -57,7 +48,7 @@ object Form1: TForm1
     Width = 75
     Caption = 'Deteksi Tepi'
     OnClick = btnDeteksiTepiClick
-    TabOrder = 4
+    TabOrder = 3
   end
   object btnErosi: TButton
     Left = 104
@@ -66,7 +57,7 @@ object Form1: TForm1
     Width = 75
     Caption = 'Erosi'
     OnClick = btnErosiClick
-    TabOrder = 5
+    TabOrder = 4
   end
   object btnDilasi: TButton
     Left = 192
@@ -75,10 +66,37 @@ object Form1: TForm1
     Width = 75
     Caption = 'Dilasi'
     OnClick = btnDilasiClick
+    TabOrder = 5
+  end
+  object btnWarna: TButton
+    Left = 16
+    Height = 25
+    Top = 80
+    Width = 75
+    Caption = 'Warna'
+    OnClick = btnWarnaClick
     TabOrder = 6
   end
+  object btnGray: TButton
+    Left = 104
+    Height = 25
+    Top = 80
+    Width = 75
+    Caption = 'Grayscale'
+    OnClick = btnGrayClick
+    TabOrder = 7
+  end
+  object btnBiner: TButton
+    Left = 192
+    Height = 25
+    Top = 80
+    Width = 75
+    Caption = 'Biner'
+    OnClick = btnBinerClick
+    TabOrder = 8
+  end
   object OpenPictureDialog1: TOpenPictureDialog
-    Left = 168
-    Top = 24
+    Left = 376
+    Top = 96
   end
 end

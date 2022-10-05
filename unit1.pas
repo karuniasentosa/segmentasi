@@ -16,18 +16,22 @@ type
     btnDilasi: TButton;
     btnOpen: TButton;
     btnSegmentasi: TButton;
-    btnSegmentasiThreshold: TButton;
     btnDeteksiTepi: TButton;
     btnErosi: TButton;
+    btnWarna: TButton;
+    btnGray: TButton;
+    btnBiner: TButton;
     Image1: TImage;
     OpenPictureDialog1: TOpenPictureDialog;
     TrackBar1: TTrackBar;
+    procedure btnBinerClick(Sender: TObject);
     procedure btnDeteksiTepiClick(Sender: TObject);
     procedure btnDilasiClick(Sender: TObject);
     procedure btnErosiClick(Sender: TObject);
+    procedure btnGrayClick(Sender: TObject);
     procedure btnOpenClick(Sender: TObject);
     procedure btnSegmentasiClick(Sender: TObject);
-    procedure btnSegmentasiThresholdClick(Sender: TObject);
+    procedure btnWarnaClick(Sender: TObject);
   private
 
   public
@@ -79,8 +83,9 @@ begin
     for x := 0 to width do
       gray[x, y] := (bitmapR[x, y] + bitmapG[x, y] + bitmapB[x, y]) div 3;
 
-  for y := 1 to height - 2 do
+  for y := 1 to height - 2 do begin
     for x := 1 to width - 2 do begin
+      if not bitmapBiner[x, y] then continue;
       buffer[0] := gray[x - 1, y - 1];
       buffer[1] := gray[x, y - 1];
       buffer[2] := gray[x + 1, y - 1];
@@ -110,6 +115,7 @@ begin
 
       Image1.Canvas.Pixels[x, y] := RGB(d, d, d);
     end;
+  end;
 
 end;
 
@@ -214,22 +220,42 @@ begin
     end;
 end;
 
-procedure TForm1.btnSegmentasiThresholdClick(Sender: TObject);
-var
-  y, x: integer;
-  avg: integer;
+procedure TForm1.btnWarnaClick(Sender: TObject);
+var y, x : integer;
 begin
-  for y := 0 to image1.height - 1 do
-    for x := 0 to image1.width - 1 do begin
-      avg := GetRValue(image1.Canvas.Pixels[x, y]);
-      avg := avg + GetGValue(image1.canvas.pixels[x, y]);
-      avg := avg + getBvalue(image1.canvas.pixels[x, y]);
-      avg := avg div 3;
-      if avg > Trackbar1.position then
-         image1.canvas.pixels[x, y] := RGB(255, 255, 255)
-      else
-        image1.canvas.pixels[x, y] := RGB(0, 0, 0);
+  for y := 0 to height - 1 do
+    for x := 0 to width - 1 do begin
+      if bitmapBiner[x, y] = objek then
+            image1.canvas.pixels[x, y] := RGB(bitmapR[x, y], bitmapG[x, y], bitmapB[x, y])
+      else image1.canvas.pixels[x, y] := clwhite;
     end;
+end;
+
+procedure TForm1.btnGrayClick(Sender: TObject);
+var y, x : integer;
+  avg : integer;
+begin
+  for y := 0 to height - 1 do
+    for x := 0 to width - 1 do begin
+      if bitmapBiner[x, y] = objek then begin
+         avg := bitmapR[x, y] + bitmapG[x, y] + bitmapB[x, y];
+         avg := avg div 3;
+         image1.canvas.pixels[x, y] := RGB(avg, avg, avg);
+      end
+      else image1.canvas.pixels[x, y] := clwhite;
+    end;
+end;
+
+procedure TForm1.btnBinerClick(Sender: TObject);
+var y, x : integer;
+begin
+  for y := 0 to height - 1 do
+    for x := 0 to width - 1 do begin
+      if bitmapBiner[x, y] = objek then
+            image1.canvas.pixels[x, y] := clblack
+      else image1.canvas.pixels[x, y] := clwhite;
+    end;
+
 end;
 
 end.
