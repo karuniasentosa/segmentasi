@@ -42,7 +42,7 @@ var
 const
   BACKGROUND= false;
   OBJEK= true;
-  structuringElement: array[0..2,0..2] of boolean = ((false, true, false), (true, true, true), (false, true, false));
+  structuringElement: array[0..2,0..2] of boolean = ((true, true, true), (true, true, true), (true, true, true));
 
 implementation
 
@@ -117,42 +117,43 @@ var
   y, x: integer;
   ys, xs: integer;
   coordX, coordY: integer;
-  seResult: boolean = false;
+  seResult: boolean;
 begin
   // we do use SE with bitmapBiner
   // then "return" the black value with rgb value
 
-  for y := -1 to image1.height - 1 do begin
-    for x := -1 to image1.width - 1 do begin
+  for y := -1 to height - 1 do begin
+    for x := -1 to width - 1 do begin
+      seResult := true;
       for xs := 0 to 2 do begin
         for ys := 0 to 2 do begin
           coordY := y + ys;
           coordX := x + xs;
 
-          if ((coordY >= 0) and (coordY < image1.height)) and
-             ((coordX >= 0) and (coordX < image1.width)) then
-                seResult := seResult AND
+          if ((coordY >= 0) and (coordY < height)) and
+             ((coordX >= 0) and (coordX < width)) then
+                seResult := seResult and
                             (bitmapBiner[x + 1, y + 1] =
                              structuringElement[xs, ys])
           else
-                seResult := seResult AND
+                seResult := seResult and
                             (false = structuringElement[xs, ys]);
         end;
       end;
       bitmapBinerModified[x + 1, y + 1] := seResult;
     end;
   end;
-  // apply bitmapBinerModified to bitmapBiner
-  for x := 0 to image1.width - 1 do begin
-    for y := 0 to image1.height - 1 do begin
+   //apply bitmapBinerModified to bitmapBiner
+  for x := 0 to width - 1 do begin
+    for y := 0 to height - 1 do begin
       bitmapBiner[x, y] := bitmapBinerModified[x, y];
     end;
   end;
 
   // reapply all true's to rgb
-  for y := 0 to image1.height - 1 do begin
-    for x := 0 to image1.width - 1 do begin
-      if bitmapBiner[x, y] = true then
+  for y := 0 to height - 1 do begin
+    for x := 0 to width - 1 do begin
+      if bitmapBiner[x, y] = objek then
             image1.canvas.pixels[x, y] := rgb(bitmapR[x, y], bitmapG[x, y], bitmapB[x, y])
       else image1.canvas.pixels[x, y] := clwhite;
     end;
@@ -164,11 +165,9 @@ var
   y, x: integer;
   avg: integer;
 begin
-  for y := 0 to image1.height - 1 do
-    for x := 0 to image1.width - 1 do begin
-      avg := GetRValue(image1.Canvas.Pixels[x, y]);
-      avg := avg + GetGValue(image1.canvas.pixels[x, y]);
-      avg := avg + getBvalue(image1.canvas.pixels[x, y]);
+  for y := 0 to height - 1 do
+    for x := 0 to width - 1 do begin
+      avg := bitmapR[x, y] + bitmapG[x, y] + bitmapB[x, y];
       avg := avg div 3;
       if avg > Trackbar1.position then         begin
          bitmapBiner[x, y] := background;
