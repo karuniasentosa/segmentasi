@@ -21,8 +21,10 @@ type
     btnWarna: TButton;
     btnGray: TButton;
     btnBiner: TButton;
+    btnSave: TButton;
     Image1: TImage;
     OpenPictureDialog1: TOpenPictureDialog;
+    SavePictureDialog1: TSavePictureDialog;
     TrackBar1: TTrackBar;
     procedure btnBinerClick(Sender: TObject);
     procedure btnDeteksiTepiClick(Sender: TObject);
@@ -32,6 +34,7 @@ type
     procedure btnOpenClick(Sender: TObject);
     procedure btnSegmentasiClick(Sender: TObject);
     procedure btnWarnaClick(Sender: TObject);
+    procedure btnSaveClick(Sender: TObject);
   private
 
   public
@@ -229,6 +232,12 @@ begin
             image1.canvas.pixels[x, y] := RGB(bitmapR[x, y], bitmapG[x, y], bitmapB[x, y])
       else image1.canvas.pixels[x, y] := clwhite;
     end;
+end;
+
+procedure TForm1.btnSaveClick(Sender: TObject);
+begin
+  if SavePictureDialog1.Execute then
+        Image1.Picture.SaveToFile(SavePictureDialog1.fileName);
 end;
 
 procedure TForm1.btnGrayClick(Sender: TObject);

@@ -1,7 +1,7 @@
 object Form1: TForm1
-  Left = 837
+  Left = 911
   Height = 439
-  Top = 170
+  Top = 185
   Width = 435
   Caption = 'Form1'
   ClientHeight = 439
@@ -95,8 +95,21 @@ object Form1: TForm1
     OnClick = btnBinerClick
     TabOrder = 8
   end
+  object btnSave: TButton
+    Left = 104
+    Height = 25
+    Top = 16
+    Width = 75
+    Caption = 'Save'
+    OnClick = btnSaveClick
+    TabOrder = 9
+  end
   object OpenPictureDialog1: TOpenPictureDialog
-    Left = 376
-    Top = 96
+    Left = 360
+    Top = 112
+  end
+  object SavePictureDialog1: TSavePictureDialog
+    Left = 360
+    Top = 184
   end
 end
